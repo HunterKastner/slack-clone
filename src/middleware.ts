@@ -1,22 +1,26 @@
 import {
   convexAuthNextjsMiddleware,
   createRouteMatcher,
-  isAuthenticatedNextjs,
   nextjsMiddlewareRedirect,
+  isAuthenticatedNextjs,
 } from "@convex-dev/auth/nextjs/server";
 
 const isPublicPage = createRouteMatcher(["/auth"]);
 
-export default convexAuthNextjsMiddleware((request) => {
-  // If the page is public and the user is authenticated, redirect to home
-  if (isPublicPage(request) && !isAuthenticatedNextjs()) {
+export default convexAuthNextjsMiddleware(async (request) => {
+  const isAuthenticatedUser = await isAuthenticatedNextjs(); // Convex handles the context internally
+
+  // Redirect unauthenticated users from private pages to "/auth"
+  if (!isPublicPage(request) && !isAuthenticatedUser) {
+    return nextjsMiddlewareRedirect(request, "/auth");
+  }
+
+  // Redirect authenticated users away from "/auth" to "/"
+  if (isPublicPage(request) && isAuthenticatedUser) {
     return nextjsMiddlewareRedirect(request, "/");
   }
 
-  // If the page is not public and the user is not authenticated, redirect to auth
-  if (!isPublicPage(request) && !isAuthenticatedNextjs()) {
-    return nextjsMiddlewareRedirect(request, "/auth");
-  }
+  return undefined; // Proceed as normal if no redirection is needed
 });
 
 export const config = {

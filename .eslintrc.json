@@ -1,28 +1,3 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react", "@next/next"],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:@next/next/recommended"
-  ],
-  "rules": {
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/semi": "warn",
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-empty-object-type": [
-      "error",
-      {
-        "allowObjectTypes": true
-      }
-    ],
-    "no-extra-semi": "error",
-    "@next/next/no-img-element": "warn"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  }
+  "extends": ["next/core-web-vitals", "next/typescript"]
 }
